@@ -26,7 +26,7 @@ from flask_rest_decorators import controller, get, post, put, delete
 
 @controller("/api/v1/hello")
 class HelloWorld:
-    @get("/", methods=["POST"])
+    @get("/")
     def index():
         return "Hello, world!"
 
@@ -43,7 +43,7 @@ class HelloWorld:
         return f"Updating {id}!"
 
     @delete("/<string:id>")
-    def welcome(id):
+    def delete_by_id(id):
         return f"Deleting {id}!"
 
 ```
@@ -93,7 +93,7 @@ class BaseController:
 class HelloWorld(BaseController):
     pass
 
-# Hello world inherits /<string:id> route under '/api/v1/hello' endpoint.
+# Hello world inherits get_by_id method and handles the '/<string:id>' route under the '/api/v1/hello' endpoint.
 ```
 
 Links
