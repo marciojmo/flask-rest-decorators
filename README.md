@@ -10,6 +10,10 @@ Install and update using [`pip`](https://pip.pypa.io/en/stable/quickstart/):
 ```shell
 $ pip install -U flask-rest-decorators
 ```
+or
+```shell
+pip install -U git+git://github.com/marciojmo/flask-rest-decorators.git
+```
 
 # A Full Example
 
@@ -89,7 +93,7 @@ class BaseController:
 class HelloWorld(BaseController):
     pass
 
-# Hello world inherits get_by_id route under '/api/v1/hello'
+# Hello world inherits /<string:id> route under '/api/v1/hello' endpoint.
 ```
 
 Links
