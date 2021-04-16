@@ -1,0 +1,1 @@
+from flask_rest_decorators.decorators import controller, get, post, put, delete
