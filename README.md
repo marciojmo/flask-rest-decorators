@@ -1,7 +1,7 @@
 # Flask REST Decorators
 
 
-Flask REST Decorators makes easy to define controllers for routing purposes on flask applications. It automatically creates a blueprint for the annotated classes and methods given.
+Flask REST Decorators makes easy to define controllers for routing purposes on flask applications.
 
 # Installing
 
@@ -17,10 +17,10 @@ pip install -U git+git://github.com/marciojmo/flask-rest-decorators.git
 
 # A Full Example
 
-The following example shows how to use flask-rest-decorators on your controller class:
+The following example shows how to use flask-rest-decorators on your controller classes:
 
 ```python
-# controllers.py
+# controllers.py module
 
 from flask_rest_decorators import controller, get, post, put, delete
 
@@ -48,56 +48,44 @@ class HelloWorld:
 
 ```
 
-This will create a class variable `HelloWorld.blueprint` contaning all the routing information defined. You should also register the blueprint to your flask app as follows:
+Behind the scenes, each method decorator `(@get, @post, @put, @delete)` will store metadata into a variable named `__rest_metainfo__` within the method itself and the `@controller` decorator will create a class variable `HelloWorld.__blueprint__` contaning all the routing information defined by these methods. 
+
+The controller decorator also adds the utility method `register_routes` to the class. This method takes a flask app instance as argument and registers the controller routes on the flask application.
+
+You may now register the controller routes on your app as follows:
 
 ```python
-# app.py
+# app.py module
 
 import flask
 import controllers
 
 app = flask.Flask(__name__)
-app.register_blueprint(controllers.HelloWorld.blueprint)
+
+# Registering controller routes
+controllers.HelloWorld.register_routes(app)
 
 if __name__ == "__main__":
     app.run(host="localhost",port=5000)
 
 ```
 
-# Advantages
-
-- Simple way of defining routes.
-- Inheritance. You may have a BaseController that handles a certain routing and use the same method on derived classes under another url_prefix.
-- Define all controllers in a single module instead of having a folder with multiple files.
-- Don't worry about clashing method names since they are bounded by the controller class.
-- Flexible and simple alternative to flask-restful (freedom over your endpoint definitions, single classed).
-- Relies on flask blueprints behind scenes. 
-
+That is the same as the following (you can do both ways):
 ```python
-# controllers.py
-
-from flask_rest_decorators import controller, get, post, put, delete
-
-class BaseController:
-    meta = {
-        "abstract": True
-    }
-
-    @get("/<string:id>")
-    def get_by_id(id):
-        return f"Getting {id}!"
-
-        
-
-@controller("/api/v1/hello")
-class HelloWorld(BaseController):
-    pass
-
-# Hello world inherits get_by_id method and handles the '/<string:id>' route under the '/api/v1/hello' endpoint.
+app.register_blueprint(controllers.HelloWorld.__blueprint__)
 ```
 
-Links
------
+# Advantages
+
+- Simple way of defining and handling routes.
+- Freedom over your endpoint definitions.
+- Relies on flask blueprints behind scenes. 
+
+# Future work
+- Make the decorators work for controller instances instead of a static class and class methods in order to take advantage of inheritance.
+- Add tests.
+
+# Links
 
 -   Source Code: https://github.com/marciojmo/flask-rest-decorators/
 -   Issue Tracker: https://github.com/marciojmo/flask-rest-decorators/issues
