@@ -23,7 +23,7 @@ def controller(endpoint):
         methods = [getattr(cls, m) for m in dir(cls)]
         for m in methods:
             if ( hasattr(m,"__rest_metainfo__") ):
-                cls.__blueprint__.add_url_rule( m.__rest_metainfo__["rule"], m.__name__, m, **m.__rest_metainfo__["options"])
+                cls.__blueprint__.add_url_rule( m.__rest_metainfo__["rule"], m.__rest_metainfo__["name"], m, **m.__rest_metainfo__["options"])
         return cls
     return add_blueprint
 
@@ -46,6 +46,7 @@ def get(rule, **options):
     def method_wrapper(f):
         f.__rest_metainfo__ = {
             "rule": rule,
+            "name": f.__name__,
             "options": {
                 **options,
                 **{ "methods": [ "GET" ] }
@@ -73,6 +74,7 @@ def post(rule, **options):
     def method_wrapper(f):
         f.__rest_metainfo__ = {
             "rule": rule,
+            "name": f.__name__,
             "options": {
                 **options,
                 **{"methods": [ "POST" ]}
@@ -101,6 +103,7 @@ def put(rule, **options):
     def method_wrapper(f):
         f.__rest_metainfo__ = {
             "rule": rule,
+            "name": f.__name__,
             "options": {
                 **options,
                 **{"methods": [ "PUT" ]}
@@ -128,6 +131,7 @@ def delete(rule, **options):
     def method_wrapper(f):
         f.__rest_metainfo__ = {
             "rule": rule,
+            "name": f.__name__,
             "options": {
                 **options,
                 **{"methods": [ "DELETE" ]}
